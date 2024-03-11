@@ -1,5 +1,5 @@
 // npm run start
-const PORT = process.env.PORT ?? 5000;
+const PORT = 5432;
 const express = require('express');
 const { v4: uuidv4 } = require('uuid');
 const cors = require('cors');
@@ -13,10 +13,7 @@ app.use(express.json()); // to be able to pass json
 
 // get all posts
 app.get('/posts', async (req, res) => {
-    // const { userEmail } = req.params;
-
     try {
-        // const posts = await pool.query('SELECT * FROM posts WHERE user_email = $1', [userEmail]);
         const posts = await pool.query('SELECT * FROM posts');
         res.json(posts.rows);
     } catch (error) {
