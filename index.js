@@ -16,6 +16,8 @@ app.get('/posts', async (req, res) => {
     try {
         const posts = await pool.query('SELECT * FROM posts');
         res.json(posts.rows);
+
+        console.log('posts: ', posts)
     } catch (error) {
         console.error('Error getting posts.', error)
     }
