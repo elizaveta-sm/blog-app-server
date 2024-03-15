@@ -6,7 +6,9 @@ const pool = new Pool({
     port: 5432,
     user: process.env.VITE_PGUSER,
     password: process.env.VITE_PGPASSWORD,
-    database: 'postgres'
+    database: 'postgres',
+    idleTimeoutMillis: 0,
+    connectionTimeoutMillis: 0,
 }) // how we communicate with the db
 
 module.exports = pool;
