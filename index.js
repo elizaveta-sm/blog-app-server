@@ -1,4 +1,3 @@
-// npm run start
 const PORT = 5432;
 const express = require('express');
 const { v4: uuidv4 } = require('uuid');
