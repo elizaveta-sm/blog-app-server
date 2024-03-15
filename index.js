@@ -7,6 +7,11 @@ const pool = require('./db');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+const { createClient } = require('@supabase/supabase-js');
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
+
 app.use(cors()); // to get rid of the cross policy error
 app.use(express.json()); // to be able to pass json 
 
@@ -23,14 +28,27 @@ app.get('/posts', async (req, res) => {
 });
 
 // get all users
+// app.get('/users', async (req, res) => {
+//     try {
+//         const users = await pool.query('SELECT email, user_name, image_url FROM users;');
+//         res.json(users.rows);
+//     } catch (error) {
+//         console.error('Error getting users.', error)
+//     }
+// });
 app.get('/users', async (req, res) => {
     try {
-        const users = await pool.query('SELECT email, user_name, image_url FROM users;');
-        res.json(users.rows);
+      const { data, error } = await supabase.from('users').select('*');
+      if (error) {
+        throw error;
+      }
+      res.json(users.rows);
     } catch (error) {
-        console.error('Error getting users.', error)
+      res.status(500).json({ error: error.message });
     }
-});
+  });
+  
+
 
 
 // create a new article
