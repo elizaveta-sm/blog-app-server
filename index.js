@@ -29,6 +29,7 @@ app.get('/users', async (req, res) => {
         res.json(users.rows);
     } catch (error) {
         console.error('Error getting users.', error)
+        console.log('The info about the request: ', req)
     }
 });
 
