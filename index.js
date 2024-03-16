@@ -37,8 +37,6 @@ app.get('/posts', async (req, res) => {
 //     }
 // });
 app.get('/users', async (req, res) => {
-    console.log('is .env getting read? through process: ', process.env.SECRET_KEY)
-    console.log('is .env getting read? through import.meta: ', import.meta.env.SECRET_KEY)
 
     try {
       const { data, error } = await supabase.from('users').select('*');
@@ -49,7 +47,7 @@ app.get('/users', async (req, res) => {
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
-  });
+});
   
 
 
