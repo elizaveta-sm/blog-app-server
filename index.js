@@ -43,7 +43,9 @@ app.get('/users', async (req, res) => {
       if (error) {
         throw error;
       }
-      res.json(users.rows);
+      res.json(data.users.rows);
+
+      console.log(data)
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
