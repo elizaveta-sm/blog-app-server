@@ -33,7 +33,7 @@ app.get('/posts', async (req, res) => {
 
 app.get('/users', async (req, res) => {
     try {
-        const users = await pool.sql`
+        const users = await sql`
             select email, user_name, image_url
             from users
         `;
