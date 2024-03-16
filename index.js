@@ -28,26 +28,26 @@ app.get('/posts', async (req, res) => {
 });
 
 // get all users
-// app.get('/users', async (req, res) => {
-//     try {
-//         const users = await pool.query('SELECT email, user_name, image_url FROM users;');
-//         res.json(users.rows);
-//     } catch (error) {
-//         console.error('Error getting users.', error)
-//     }
-// });
 app.get('/users', async (req, res) => {
-
     try {
-      const { data, error } = await supabase.from('users').select('*');
-      if (error) {
-        throw error;
-      }
-      res.json(users.rows);
+        const users = await pool.query('SELECT email, user_name, image_url FROM users;');
+        res.json(users.rows);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+        console.error('Error getting users.', error)
     }
 });
+// app.get('/users', async (req, res) => {
+
+//     try {
+//       const { data, error } = await supabase.from('users').select('*');
+//       if (error) {
+//         throw error;
+//       }
+//       res.json(users.rows);
+//     } catch (error) {
+//       res.status(500).json({ error: error.message });
+//     }
+// });
   
 
 
