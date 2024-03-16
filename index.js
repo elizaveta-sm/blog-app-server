@@ -37,9 +37,7 @@ app.get('/users', async (req, res) => {
             select email, user_name, image_url
             from users
         `;
-        res.json(users.rows);
-
-        res.json(users)
+        res.json(users);
     } catch (error) {
         console.error('Error getting users.', error)
     }
