@@ -43,7 +43,7 @@ app.get('/users', async (req, res) => {
       if (error) {
         throw error;
       }
-      res.json(data.users.rows);
+      res.json(data.rows);
 
       console.log(data)
     } catch (error) {
