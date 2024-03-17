@@ -79,7 +79,7 @@ app.delete('/delete-post/:id', async (req, res) => {
     }
 })
 
-// TODO login
+// login
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
@@ -114,12 +114,18 @@ app.post('/login', async (req, res) => {
 app.post('/register', async (req, res) => {
 
     const { username, email, password, IMAGE_URL } = req.body;
+    console.log('username in the request body: ', username)
 
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(password, salt);
 
     try {
-        const register = await pool.query('INSERT INTO users (email, user_name, hashed_password, image_url) VALUES($1, $2, $3, $4)', [email, username, hashedPassword, IMAGE_URL]);
+        const register = await sql`
+            insert into users 
+                (email, user_name, hashed_password, image_url)
+            values
+                (${ email }, ${ username },  ${ hashedPassword }, ${ IMAGE_URL })
+        `;
 
         const token = jwt.sign({ email }, 'secret', { expiresIn: '1hr' });
 
