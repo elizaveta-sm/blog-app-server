@@ -9,28 +9,23 @@ const jwt = require('jsonwebtoken');
 
 import sql from './db';
 
-// const { createClient } = require('@supabase/supabase-js');
-// const supabaseUrl = process.env.SUPABASE_URL;
-// const supabaseKey = process.env.SUPABASE_ANON_KEY;
-// const supabase = createClient(supabaseUrl, supabaseKey);
-
 app.use(cors()); // to get rid of the cross policy error
 app.use(express.json()); // to be able to pass json 
 
 // get all posts
 app.get('/posts', async (req, res) => {
     try {
-        const posts = await pool.query('SELECT * FROM posts');
-        res.json(posts.rows);
-
-        console.log('posts: ', posts)
+        const posts = await sql`
+            select *
+            from posts
+        `;
+        res.json(posts);
     } catch (error) {
         console.error('Error getting posts.', error)
     }
 });
 
 // get all users
-
 app.get('/users', async (req, res) => {
     try {
         const users = await sql`
@@ -42,35 +37,8 @@ app.get('/users', async (req, res) => {
         console.error('Error getting users.', error)
     }
 });
-
-// app.get('/users', async (req, res) => {
-//     try {
-//         const users = await pool.query('SELECT email, user_name, image_url FROM users;');
-//         res.json(users.rows);
-//     } catch (error) {
-//         console.error('Error getting users.', error)
-//     }
-// });
-
-// a working method but a different one is needed
-// app.get('/users', async (req, res) => {
-
-//     try {
-//       const { data, error } = await supabase.from('users').select('*');
-//       if (error) {
-//         throw error;
-//       }
-//       res.json(data.rows);
-
-//       console.log(data)
-//     } catch (error) {
-//       res.status(500).json({ error: error.message });
-//     }
-// });
   
-
-
-// create a new article
+// TODO create a new article
 app.post('/posts', async (req, res) => {
     const { user_email, title, content, post_date, category, image_url } = req.body;
 
@@ -80,12 +48,13 @@ app.post('/posts', async (req, res) => {
         const newArticle = await pool.query(`INSERT INTO "posts"(id, user_email, title, content, post_date, category, image_url) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *`, [id, user_email, title, content, post_date, category, image_url]);
 
         res.json(newArticle.rows[0])
+        
     } catch (error) {
         console.error(error)
     }
 });
 
-// edit an article
+// TODO edit an article
 app.put('/posts/:id', async (req, res) => {
     const { id } = req.params;
     const { user_email, title, content, post_date, category, image_url } = req.body;
@@ -98,7 +67,7 @@ app.put('/posts/:id', async (req, res) => {
     }
 });
 
-// delete a post
+// TODO delete a post
 app.delete('/delete-post/:id', async (req, res) => {
     const { id } = req.params;
     
@@ -110,22 +79,26 @@ app.delete('/delete-post/:id', async (req, res) => {
     }
 })
 
-// login
+// TODO login
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        const users = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+        const users = await sql`
+            select *
+            from users
+            where email = ${ email }
+        `;
 
-        if (!users.rows.length) {
+        if (!users.length) {
             return res.json('User does not exist')
         };
 
-        const success = await bcrypt.compare(password, users.rows[0].hashed_password);
+        const success = await bcrypt.compare(password, users[0].hashed_password);
         const token = jwt.sign({ email }, 'secret', { expiresIn: '1hr' });
 
         if (success) {
-            res.json({ 'email': users.rows[0].email, token, 'userName': users.rows[0].user_name, 'imageUrl': users.rows[0].image_url })
+            res.json({ 'email': users.email, token, 'userName': users.user_name, 'imageUrl': users.image_url })
         } else if (!success) {
             res.json({status: 400, errorText: 'Incorrect email or password'})
         } else {
@@ -133,11 +106,11 @@ app.post('/login', async (req, res) => {
         }
 
     } catch (error) {
-        console.error('error logging in: ', error);
+        console.error('Error logging in.', error);
     }
 });
 
-// register
+// TODO register
 app.post('/register', async (req, res) => {
 
     const { username, email, password, IMAGE_URL } = req.body;
@@ -157,7 +130,7 @@ app.post('/register', async (req, res) => {
     }
 });
 
-// update a user profile
+// TODO update a user profile
 app.put('/update-profile', async (req, res) => {
     const { userEmail, image, name } = req.body;
 
@@ -169,7 +142,7 @@ app.put('/update-profile', async (req, res) => {
     }
 });
 
-// delete a user 
+// TODO delete a user 
 app.delete('/delete-profile/:userEmail', async (req, res) => {
 
     const { userEmail } = req.params;
