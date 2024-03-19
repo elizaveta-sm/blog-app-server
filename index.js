@@ -98,6 +98,12 @@ app.post('/login', async (req, res) => {
         const token = jwt.sign({ email }, 'secret', { expiresIn: '1hr' });
 
         if (success) {
+            console.log(users)
+            console.log(users.email)
+            console.log(token)
+            console.log(users.user_name)
+            console.log(users.image_url)
+            
             res.json({ 'email': users.email, token, 'userName': users.user_name, 'imageUrl': users.image_url })
         } else if (!success) {
             res.json({status: 400, errorText: 'Incorrect email or password'})
@@ -128,7 +134,6 @@ app.post('/register', async (req, res) => {
 
         const token = jwt.sign({ email }, 'secret', { expiresIn: '1hr' });
 
-        console.log(res)
         res.json({ status: 200, email, token, 'userName': username, 'imageUrl': IMAGE_URL });
 
     } catch (error) {
