@@ -114,7 +114,6 @@ app.post('/login', async (req, res) => {
 app.post('/register', async (req, res) => {
 
     const { username, email, password, IMAGE_URL } = req.body;
-    console.log('username in the request body: ', username)
 
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(password, salt);
@@ -129,6 +128,7 @@ app.post('/register', async (req, res) => {
 
         const token = jwt.sign({ email }, 'secret', { expiresIn: '1hr' });
 
+        console.log(res)
         res.json({ status: 200, email, token, 'userName': username, 'imageUrl': IMAGE_URL });
 
     } catch (error) {
