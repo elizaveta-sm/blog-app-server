@@ -98,13 +98,7 @@ app.post('/login', async (req, res) => {
         const token = jwt.sign({ email }, 'secret', { expiresIn: '1hr' });
 
         if (success) {
-            console.log(users)
-            console.log(users.email)
-            console.log(token)
-            console.log(users.user_name)
-            console.log(users.image_url)
-            
-            res.json({ 'email': users.email, token, 'userName': users.user_name, 'imageUrl': users.image_url })
+            res.json({ 'email': users[0].email, token, 'userName': users[0].user_name, 'imageUrl': users[0].image_url })
         } else if (!success) {
             res.json({status: 400, errorText: 'Incorrect email or password'})
         } else {
