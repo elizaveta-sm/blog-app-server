@@ -110,7 +110,7 @@ app.post('/login', async (req, res) => {
     }
 });
 
-// TODO register
+// register
 app.post('/register', async (req, res) => {
 
     const { username, email, password, IMAGE_URL } = req.body;
