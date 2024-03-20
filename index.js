@@ -154,8 +154,9 @@ app.put('/update-profile', async (req, res) => {
             where email = ${userEmail}
         `;
 
-        console.log(editedUser)
-        res.json(editedUser[0]);
+        console.log('edited user', editedUser)
+        console.log('user: ', user)
+        res.json(editedUser);
     } catch (error) {
         console.error(error);
         res.status(500).json(error);
