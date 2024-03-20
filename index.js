@@ -145,6 +145,8 @@ app.put('/update-profile', async (req, res) => {
         image_url: image
     };
 
+    console.log(user)
+
     try {
         // const editedUser = await pool.query('UPDATE users SET image_url = $1, user_name = $2 WHERE email = $3;', [image, name, userEmail]);
         const editedUser = await sql`
