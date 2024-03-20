@@ -155,7 +155,7 @@ app.put('/update-profile', async (req, res) => {
         `;
 
         console.log(editedUser)
-        res.json(editedUser);
+        res.json(editedUser[0]);
     } catch (error) {
         console.error(error);
         res.status(500).json(error);
