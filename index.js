@@ -45,12 +45,20 @@ app.post('/posts', async (req, res) => {
     const id = uuidv4();
 
     try {
-        const newArticle = await pool.query(`INSERT INTO "posts"(id, user_email, title, content, post_date, category, image_url) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *`, [id, user_email, title, content, post_date, category, image_url]);
-
-        res.json(newArticle.rows[0])
+        const newArticle = await sql`
+            insert into posts 
+                (id, user_email, title, content, post_date, category, image_url)
+            values
+                (${ id }, ${ user_email },  ${ title }, ${ content }, ${ post_date }, ${ category }, ${ image_url })
+        `;
         
+
+        console.log('new article: ', newArticle)
+        console.log('new article[0]: ', newArticle[0])
+        res.json(newArticle)
     } catch (error) {
-        console.error(error)
+        console.error(error);
+        res.json({status: 500, errorText: 'Error creating an article.'});
     }
 });
 
@@ -135,7 +143,7 @@ app.post('/register', async (req, res) => {
     }
 });
 
-// TODO update a user profile
+// update a user profile
 app.put('/update-profile', async (req, res) => {
     const { userEmail, image, name } = req.body;
 
@@ -145,7 +153,6 @@ app.put('/update-profile', async (req, res) => {
     };
 
     try {
-        // const editedUser = await pool.query('UPDATE users SET image_url = $1, user_name = $2 WHERE email = $3;', [image, name, userEmail]);
         const editedUser = await sql`
             update users 
             set ${
@@ -154,8 +161,7 @@ app.put('/update-profile', async (req, res) => {
             where email = ${userEmail}
         `;
 
-        console.log('edited user', editedUser)
-        console.log('user: ', user)
+        console.log('edited user', editedUser[0])
         res.json(editedUser);
     } catch (error) {
         console.error(error);
