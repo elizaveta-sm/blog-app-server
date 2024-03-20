@@ -139,8 +139,21 @@ app.post('/register', async (req, res) => {
 app.put('/update-profile', async (req, res) => {
     const { userEmail, image, name } = req.body;
 
+    const user = {
+        email: userEmail,
+        user_name: name,
+        image_url: image
+    };
+
     try {
-        const editedUser = await pool.query('UPDATE users SET image_url = $1, user_name = $2 WHERE email = $3;', [image, name, userEmail]);
+        // const editedUser = await pool.query('UPDATE users SET image_url = $1, user_name = $2 WHERE email = $3;', [image, name, userEmail]);
+        const editedUser = await sql`
+            update users set ${
+                sql(user, 'user_name', 'image_url')
+            }
+            where email = ${ user.userEmail }
+        `;
+
         res.json(editedUser);
     } catch (error) {
         console.error(error);
