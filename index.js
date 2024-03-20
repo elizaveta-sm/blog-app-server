@@ -52,10 +52,7 @@ app.post('/posts', async (req, res) => {
                 (${ id }, ${ user_email },  ${ title }, ${ content }, ${ post_date }, ${ category }, ${ image_url })
         `;
         
-
-        console.log('new article: ', newArticle)
-        console.log('new article[0]: ', newArticle[0])
-        res.json(newArticle)
+        res.json(newArticle);
     } catch (error) {
         console.error(error);
         res.json({status: 500, errorText: 'Error creating an article.'});
