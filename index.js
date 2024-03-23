@@ -38,7 +38,7 @@ app.get('/users', async (req, res) => {
     }
 });
   
-// TODO create a new article
+// create a new article
 app.post('/posts', async (req, res) => {
     const { user_email, title, content, post_date, category, image_url } = req.body;
 
@@ -64,8 +64,25 @@ app.put('/posts/:id', async (req, res) => {
     const { id } = req.params;
     const { user_email, title, content, post_date, category, image_url } = req.body;
 
+    const article = {
+        user_email,
+        title,
+        content,
+        post_date,
+        category,
+        image_url
+    };
+    console.log('the article object: ', article)
+
     try {
-        const editedArticle = await pool.query('UPDATE posts SET user_email = $1, title = $2, content = $3, post_date = $4, category = $5, image_url = $6 WHERE id = $7;', [user_email, title, content, post_date, category, image_url, id]);
+        const editedArticle = await sql`
+            update posts 
+            set ${
+                sql(user, 'user_email', 'title', 'content', 'post_date', 'category', 'image_url')
+            }
+            where id = ${id}
+        `;
+
         res.json(editedArticle);
     } catch (error) {
         console.error(error);
@@ -158,7 +175,7 @@ app.put('/update-profile', async (req, res) => {
             where email = ${userEmail}
         `;
 
-        console.log('edited user', editedUser[0])
+        console.log('edited user: ', editedUser)
         res.json(editedUser);
     } catch (error) {
         console.error(error);
