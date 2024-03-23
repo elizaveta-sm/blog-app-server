@@ -78,7 +78,7 @@ app.put('/posts/:id', async (req, res) => {
         const editedArticle = await sql`
             update posts 
             set ${
-                sql(user, 'user_email', 'title', 'content', 'post_date', 'category', 'image_url')
+                sql(article, 'user_email', 'title', 'content', 'post_date', 'category', 'image_url')
             }
             where id = ${id}
         `;
