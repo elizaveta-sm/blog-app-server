@@ -88,10 +88,10 @@ app.put('/posts/:id', async (req, res) => {
     }
 });
 
-// TODO delete a post
+// delete a post
 app.delete('/delete-post/:id', async (req, res) => {
     const { id } = req.params;
-    
+
     try {
         const deletedPost = await sql`
             delete from posts
@@ -192,10 +192,14 @@ app.delete('/delete-profile/:userEmail', async (req, res) => {
     const { userEmail } = req.params;
 
     try {
-        const deletedUser = await pool.query('DELETE FROM users WHERE email = $1', [userEmail]);
+        const deletedUser = await sql`
+            delete from users
+            where email = ${ userEmail }
+        `;
+
         res.json(deletedUser);
     } catch (error) {
-        console.log('error deleting a post', error)
+        console.log('error deleting a user: ', error)
     }
 })
 
