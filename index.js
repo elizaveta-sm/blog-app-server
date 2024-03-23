@@ -59,7 +59,7 @@ app.post('/posts', async (req, res) => {
     }
 });
 
-// TODO edit an article
+// edit an article
 app.put('/posts/:id', async (req, res) => {
     const { id } = req.params;
     const { user_email, title, content, post_date, category, image_url } = req.body;
@@ -72,7 +72,6 @@ app.put('/posts/:id', async (req, res) => {
         category,
         image_url
     };
-    console.log('the article object: ', article)
 
     try {
         const editedArticle = await sql`
@@ -94,7 +93,11 @@ app.delete('/delete-post/:id', async (req, res) => {
     const { id } = req.params;
     
     try {
-        const deletedPost = await pool.query('DELETE FROM posts WHERE id = $1', [id]);
+        const deletedPost = await sql`
+            delete from posts
+            where id = ${ id }
+        `;
+
         res.json(deletedPost);
     } catch (error) {
         console.log('error deleting a post')
