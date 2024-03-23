@@ -22,6 +22,7 @@ app.get('/posts', async (req, res) => {
         res.json(posts);
     } catch (error) {
         console.error('Error getting posts.', error)
+        res.status(500).json(error);
     }
 });
 
@@ -35,6 +36,7 @@ app.get('/users', async (req, res) => {
         res.json(users);
     } catch (error) {
         console.error('Error getting users.', error)
+        res.status(500).json(error);
     }
 });
   
@@ -85,6 +87,7 @@ app.put('/posts/:id', async (req, res) => {
         res.json(editedArticle);
     } catch (error) {
         console.error(error);
+        res.status(500).json(error);
     }
 });
 
@@ -101,6 +104,7 @@ app.delete('/delete-post/:id', async (req, res) => {
         res.json(deletedPost);
     } catch (error) {
         console.log('error deleting a post')
+        res.status(500).json(error);
     }
 })
 
@@ -132,6 +136,7 @@ app.post('/login', async (req, res) => {
 
     } catch (error) {
         console.error('Error logging in.', error);
+        res.status(500).json(error);
     }
 });
 
@@ -186,7 +191,7 @@ app.put('/update-profile', async (req, res) => {
     }
 });
 
-// TODO delete a user 
+// delete a user 
 app.delete('/delete-profile/:userEmail', async (req, res) => {
 
     const { userEmail } = req.params;
@@ -200,6 +205,7 @@ app.delete('/delete-profile/:userEmail', async (req, res) => {
         res.json(deletedUser);
     } catch (error) {
         console.log('error deleting a user: ', error)
+        res.status(500).json(error);
     }
 })
 
